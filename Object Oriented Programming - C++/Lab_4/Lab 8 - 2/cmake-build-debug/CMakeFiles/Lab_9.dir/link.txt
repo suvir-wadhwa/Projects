@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++ -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/Lab_9.dir/rec08.cpp.o CMakeFiles/Lab_9.dir/registrar.cpp.o CMakeFiles/Lab_9.dir/student.cpp.o CMakeFiles/Lab_9.dir/course.cpp.o CMakeFiles/Lab_9.dir/class1.cpp.o -o Lab_9 
