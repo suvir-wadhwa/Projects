@@ -1,0 +1,45 @@
+
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pr:
+- master
+
+pool: 'DBAPool'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+
+steps:
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:SignManifests=false /p:SignAssembly=false'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/t:Publish /p:SignAssembly=false /P:SignManifests=false'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+  condition:  and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  
+- powershell: |
+    Copy-Item -Path "DBA Projects App" -Destination "\\ausqafsfile00\dba\Common\DBA Projects V4\DBAProjects_072022" -Recurse -Force
